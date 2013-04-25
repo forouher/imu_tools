@@ -139,7 +139,6 @@ void ImuFilter::imuCallback(const ImuMsg::ConstPtr& imu_msg_raw)
     dt);
 
   publishFilteredMsg(imu_msg_raw);
-  publishTransform(imu_msg_raw);
 }
 
 void ImuFilter::imuMagCallback(
@@ -189,20 +188,6 @@ void ImuFilter::imuMagCallback(
     dt);
 
   publishFilteredMsg(imu_msg_raw);
-  publishTransform(imu_msg_raw);
-}
-
-void ImuFilter::publishTransform(const ImuMsg::ConstPtr& imu_msg_raw)
-{
-  tf::Quaternion q(q1, q2, q3, q0);
-  tf::Transform transform;
-  transform.setOrigin( tf::Vector3( 0.0, 0.0, 0.0 ) );
-  transform.setRotation( q );
-  tf_broadcaster_.sendTransform( tf::StampedTransform( transform,
-                   imu_msg_raw->header.stamp,
-                   fixed_frame_,
-                   imu_frame_ ) );
-
 }
 
 void ImuFilter::publishFilteredMsg(const ImuMsg::ConstPtr& imu_msg_raw)
